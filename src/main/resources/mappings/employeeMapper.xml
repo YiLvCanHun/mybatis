@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zp.helloworld.entity.EmployeeMapper">
+    <select id="selectEmp" resultType="com.zp.helloworld.entity.Employee">
+        select id, LAST_NAME lastName, EMAIL, GENDER
+        from employee
+        where id = #{id}
+    </select>
+</mapper>
