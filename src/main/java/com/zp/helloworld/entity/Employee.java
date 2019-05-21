@@ -7,10 +7,23 @@ package com.zp.helloworld.entity;
  */
 public class Employee {
 
-    private String id;
+    private Integer id;
     private String lastName;
     private String email;
     private String gender;
+
+    public Employee(String lastName, String email, String gender) {
+        this.lastName = lastName;
+        this.email = email;
+        this.gender = gender;
+    }
+
+    public Employee(Integer id, String lastName, String email, String gender) {
+        this.id = id;
+        this.lastName = lastName;
+        this.email = email;
+        this.gender = gender;
+    }
 
     @Override
     public String toString() {
@@ -22,11 +35,11 @@ public class Employee {
                 '}';
     }
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
