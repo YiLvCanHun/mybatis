@@ -10,6 +10,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -78,10 +79,11 @@ public class start {
 
     /**
      * 1. mybatis 允许增删改查定义以下类型返回值
-     *      Integer,Long,Boolean,void
+     * Integer,Long,Boolean,void
      * 2. 需要手动提交数据
-     *      sqlSessionFactory.openSession() --> 手动提交
-     *      sqlSessionFactory.openSession(true) --> 自动提交
+     * sqlSessionFactory.openSession() --> 手动提交
+     * sqlSessionFactory.openSession(true) --> 自动提交
+     *
      * @throws IOException IO
      */
     @Test
@@ -105,6 +107,7 @@ public class start {
 
     /**
      * 插入数据后,获取自增主键
+     *
      * @throws IOException IO
      */
     @Test
@@ -114,7 +117,7 @@ public class start {
 
         try {
             EmployeeMapper mapper = sqlSession.getMapper(EmployeeMapper.class);
-            Employee employee = new Employee( "yue.yuan", "13992365953@163.com", "1");
+            Employee employee = new Employee("yue.yuan", "13992365953@163.com", "1");
             Long b = mapper.addEmp(employee);
             System.out.println(b);
 
@@ -126,7 +129,8 @@ public class start {
     }
 
     /**
-     * 插入数据后,获取自增主键
+     * 查询
+     *
      * @throws IOException IO
      */
     @Test
@@ -135,18 +139,46 @@ public class start {
         SqlSession sqlSession = sqlSessionFactory.openSession();
 
         try {
+//            指定的字段属性为map的key,对象为map的value
             EmployeeMapper mapper = sqlSession.getMapper(EmployeeMapper.class);
             Map<Integer, Employee> peng = mapper.getEmpByLastNameLikeReturnMap("yuan");
             for (Integer s : peng.keySet()) {
                 System.out.println(s + ": " + peng.get(s));
             }
 
+            System.out.println("****************************************");
+
+//            列名为key,值为value
             Map<String, Object> map = mapper.getEmpByIdReturnMap(1);
             for (String s : map.keySet()) {
                 System.out.println(s + ": " + map.get(s));
             }
+
+            System.out.println("****************************************");
+
+//            传入map,获取对象
+            Map<String,Object> paramMap = new HashMap<>();
+            paramMap.put("id", 1);
+            paramMap.put("lastName", "peng.zhang");
+            paramMap.put("tableName", "employee");
+            Employee emp = mapper.getEmpByMap(paramMap);
+            System.out.println(emp);
         } finally {
             sqlSession.close();
         }
+    }
+
+    // 测试二级缓存的存在
+    @Test
+    public void testSecondCache() throws IOException {
+        SqlSessionFactory sqlSessionFactory = getSqlSessionFactory();
+        SqlSession sqlSession = sqlSessionFactory.openSession();
+        EmployeeMapper mapper = sqlSession.getMapper(EmployeeMapper.class);
+        Employee employee = mapper.finaAll();
+        sqlSession.close();
+        SqlSession sqlSession1 = sqlSessionFactory.openSession();
+        EmployeeMapper mapper1 = sqlSession1.getMapper(EmployeeMapper.class);
+        Employee employee1 = mapper1.finaAll();
+        System.out.println(employee == employee1);
     }
 }

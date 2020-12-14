@@ -1,11 +1,13 @@
 package com.zp.helloworld.entity;
 
+import java.io.Serializable;
+
 /**
  * Created by peng.zhang
  * description:
  * Time: 2019-04-28 23:19
  */
-public class Employee {
+public class Employee implements Serializable {
 
     private Integer id;
     private String lastName;

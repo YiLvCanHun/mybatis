@@ -1,8 +1,7 @@
 package com.zp.helloworld.dao;
 
 import com.zp.helloworld.entity.Employee;
-import org.apache.ibatis.annotations.MapKey;
-import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 import java.util.Map;
@@ -12,6 +11,8 @@ import java.util.Map;
  * Description:
  * Time: 2019/4/30-15:45.
  */
+// 注解方式开启二级缓存
+@CacheNamespace(blocking = true)
 public interface EmployeeMapper {
 
     //@MapKey:告诉mybatis封装这个map的时候使用哪个属性作为map的key
@@ -27,6 +28,7 @@ public interface EmployeeMapper {
 
     Employee getEmpByIdAndLastName(@Param("id")Integer id, @Param("lastName")String lastName);
 
+    // @Options(useCache = true)
     Employee getEmpById(Integer id);
 
     boolean updateEmpById(Employee employee);
@@ -36,5 +38,8 @@ public interface EmployeeMapper {
     boolean updateEmp(Employee employee);
 
     void deleteEmpById(Integer id);
+
+    @Select("select * from employee where id = 1")
+    Employee finaAll();
 
 }
